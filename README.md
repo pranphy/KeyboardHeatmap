@@ -1,11 +1,9 @@
 # Keyboard Heatmap
 
-This project helps create heatmap of keys in keyboard for some given text.
-
-Supports Nepali `नेपाली` keyboard layout, the popular `बकमान` for now and the usual `qwerty` layout.
+This project helps to create heatmap of keys in keyboard for some given text. Supports Nepali `नेपाली` keyboard layout, the popular `बकमान`(bakamana) for now and the usual `qwerty` layout. Other layouts will be added in due course.
 
 # Installation
-Clone the repository
+Clone the repository and run setup.
 ```
 git clone https://github.com/pranphy/KeyboardHeatmap
 cd KeyboardHeatmap
@@ -38,8 +36,21 @@ Options:
 ```
 
 # Example
+For example if you want to see the heatmap of keys in a file named `test.txt` and
+output the heatmap image as `heatmap_test.png` you will do the following
+```
+kbhmap -i test.txt -o heatmap_test.png
+```
 
-See [notebook](./test/MakeHeatmap.ipynb) for usage example
+You can configure other options. Cmap takes any valid matplotlib
+color map. passing `--dpi=100` sets the dpi of output image to 100. 
+The smoothing `--sigma` parameter is to smooth out the heatmap. Since
+the keys have precise location they will have high density at the key
+location and sharp fall at th key edge. If sigma is supplied it 
+applies gaussian smoothing to the heatmap to make it smoother and nicer.
+
+
+See [notebook](./test/MakeHeatmap.ipynb) for usage as a library.
 
 # Outputs
 Example heatmap for QWERTY
