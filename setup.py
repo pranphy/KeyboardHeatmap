@@ -14,13 +14,13 @@ with open("README.md",'r') as fh:
 
 setuptools.setup(
     name="kbhmap",
-    version="0.5.4",
+    version="0.5.5",
     author="Prakash Gautam",
     author_email="info@pgautam.com.np",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
-    package_data={'kbhmap':['images/*.png'],},
+    package_data={'kbhmap':['**.png'],},
     #install_requres['numpy','scipy','matplotlib'],
 
     url='https://github.com/pranphy/KeyboardHeatmap',
