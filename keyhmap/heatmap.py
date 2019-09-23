@@ -7,9 +7,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import PIL
-from PIL import Image
-from PIL import ImageChops
+
 from . import textutil as utl
 
 class  Heatmap():
@@ -20,6 +18,13 @@ class  Heatmap():
 
 
     def __make_map(self):
+        # here is how the map works, I looked at the keyboard layout
+        # The rectangular grid of keys are uneven but the uneven keys are 
+        # non printable. Moss of the printable keys are even 
+        # so I tried to represent the keys with a grid of numbers
+        # Felt lazy to type now. Read the code below and figure it out.
+        # so I start out with setting top left corner whichis 
+        # the key `~ and s
         char_data = [
             [0,0,r'`~ 1! 2@ 3# 4$ 5% 6^ 7& 8* 9( 0) -_ =+'],
             [4,5,r'qQ wW eE rR tT yY uU iI oO pP [{ ]} \|'],
@@ -44,7 +49,7 @@ class  Heatmap():
     def get_cells(self,e):
         return [(r,c) for r in range(e[0][0],e[1][0]) for c in range(e[0][1],e[1][1])]
     
-    def get_cells_for_char(self,char,ignore_other=True):
+    def get_cells_for_char(self,char,ignore_other=True,verbose=False):
         try:
             char_map = self.key_map
             key = [x for x in char_map.keys() if char in x][0]
@@ -57,7 +62,8 @@ class  Heatmap():
 
         except Exception:
             if ignore_other:
-                print(f'Warning:: `{char}` ignored')
+                if verbose:
+                    print(f'Warning:: `{char}` ignored')
                 return []
             else:
                 raise KeyError(f'{char} not found in the map')
@@ -67,51 +73,61 @@ class  Heatmap():
             self.heatmap_array[r][c] *= factor
         
 
-    def __fill_heatmap(self,char_dict,ignore_other=True,normalize=True):
+    def __fill_heatmap(self,char_dict,ignore_other=True,verbose=False,normalize=True):
         for char,freq in char_dict.items():
-            for r,c in self.get_cells_for_char(char,ignore_other):
+            for r,c in self.get_cells_for_char(char,ignore_other,verbose):
                 self.heatmap_array[r][c] += freq
         
         self.__scale_char('lshift')
         self.__scale_char(' ')
         if normalize:
-            self.heatmap_array = self.heatmap_array/np.sum(self.heatmap_array)
+            self.heatmap_array /= np.sum(self.heatmap_array)
 
-    def make_heatmap(self,data,layout=None,ignore_other=True,normalize=True):
+    def make_heatmap(self,data,layout=None,ignore_other=True,verbose=False,alpha=0.8,sigmas=None,**kwargs):
+        normalize = True
         layout = layout or self.layout
         if isinstance(data,dict):
             if layout == 'bakamana':
                 data =  {utl.to_ascii(k):v for k,v in data.items()}
                 
-            return self.__fill_heatmap(data,ignore_other,normalize)
+            self.__fill_heatmap(data,ignore_other,verbose,normalize)
         elif isinstance(data,str):
             char_dict = utl.get_frequencies(data,layout)
-            return self.__fill_heatmap(char_dict,ignore_other,normalize)
+            self.__fill_heatmap(char_dict,ignore_other,verbose,normalize)
         else:
             print('Datatype not handled yet')
-
-    def save(self,save_dir,cmap='Reds',op_filename='cm.png'):
-        curdir = save_dir
-        plt.clf()
+            raise Exception("Unknown datatype, can not make heatmap")
+        if sigmas is not None:
+            import scipy as sp
+            import scipy.ndimage
+            sigma = (sigmas,sigmas)
+            self.heatmap_array = sp.ndimage.filters.gaussian_filter(self.heatmap_array,sigma,mode='constant')
+        self.__make_plot(alpha,**kwargs)
+    
+    def __make_plot(self,alpha,**kwargs):
+        fig, ax = plt.subplots()
         plt.xticks([])
         plt.yticks([])
         plt.axis('off')
 
-        plt.imshow(self.heatmap_array, interpolation='quadric', zorder=1, cmap=cmap)
+        __ = ax.imshow(self.heatmap_array,interpolation='gaussian',zorder=1,alpha=alpha,**kwargs)
+        
+        img = plt.imread(f'./keyhmap/images/keyboard_{self.layout}.png')
 
-        plt.savefig(
-            f'{curdir}/images/heatmap.png',
-            dpi=100,
+        __ = ax.imshow(img, zorder=0, extent=[0,59.3, 19.4, 0])
+        self.heatmap_figure = fig
+        
+    def show(self):
+        self.heatmap_figure.show()
+
+    def save(self,save_dir,op_filename='cm.png',dpi=265,**kwargs):
+        curdir = save_dir
+        self.heatmap_figure.savefig(
+            f'{curdir}/images/{op_filename}',
+            dpi=dpi,
             pad_inches=0,
             transparent=True,
-            bbox_inches='tight'
+            bbox_inches='tight',
+            **kwargs
         )
-        keyboard = PIL.Image.open(f'{curdir}/images/keyboard_{self.layout}.png')
-        heatmap = PIL.Image.open(f'{curdir}/images/heatmap.png')
-
-        heatmap = heatmap.resize(keyboard.size, Image.ANTIALIAS)
-        heatmap.save(f'{curdir}/images/heatmap.png')
-        blended = PIL.ImageChops.darker(keyboard, heatmap)
-        blended.save(f'{curdir}/images/{op_filename}')
-            
 
