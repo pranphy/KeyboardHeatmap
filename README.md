@@ -5,10 +5,15 @@ This project helps create heatmap of keys in keyboard for some given text.
 Supports Nepali `नेपाली` keyboard layout, the popular `बकमान` for now and the usual `qwerty` layout.
 
 # Installation
- TODO
+TODO
  
 # Usage
-Generate heatmap
+
+Generate heatmap. 
+
+# Example
+
+See [notebook](./test/MakeHeatmap.ipynb) for usage example
 
 # Outputs
 Example heatmap for QWERTY

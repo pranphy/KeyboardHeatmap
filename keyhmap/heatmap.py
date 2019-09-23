@@ -68,7 +68,7 @@ class  Heatmap():
             else:
                 raise KeyError(f'{char} not found in the map')
     
-    def __scale_char(self,key,factor=0.25):
+    def __scale_char(self,key,factor=0.30):
         for r,c in self.get_cells(self.key_map[key]):
             self.heatmap_array[r][c] *= factor
         
@@ -109,6 +109,7 @@ class  Heatmap():
         plt.xticks([])
         plt.yticks([])
         plt.axis('off')
+        
 
         __ = ax.imshow(self.heatmap_array,interpolation='gaussian',zorder=1,alpha=alpha,**kwargs)
         
