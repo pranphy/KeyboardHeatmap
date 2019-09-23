@@ -50,12 +50,12 @@ location and sharp fall at th key edge. If sigma is supplied it
 applies gaussian smoothing to the heatmap to make it smoother and nicer.
 
 
-See [notebook](./test/MakeHeatmap.ipynb) for usage as a library.
+See [notebook](http://github.com/pranphy/keyboardheatmap/test/MakeHeatmap.ipynb) for usage as a library.
 
 # Outputs
 Example heatmap for QWERTY
-![An example heatmap](keyhmap/images/example_qwerty.png)
+![An example heatmap](http://github.com/pranphy/keyboardheatmap/keyhmap/images/example_qwerty.png)
 
 
 Example heatmap for बकमान 
-![An example heatmap](keyhmap/images/example_bakamana.png)
+![An example heatmap](http://github.com/pranphy/keyboardheatmap/keyhmap/images/example_bakamana.png)
