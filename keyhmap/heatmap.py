@@ -5,6 +5,8 @@
 # author : Prakash [प्रकाश]
 # date   : 2019-09-22 17:40
 
+import os
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -15,6 +17,7 @@ class  Heatmap():
         self.layout = layout
         self.key_map = self.__make_map()
         self.heatmap_array = np.zeros(shape=(20,60))
+        self.curdir = os.path.dirname(os.path.abspath(__file__))
 
 
     def __make_map(self):
@@ -109,11 +112,12 @@ class  Heatmap():
         plt.xticks([])
         plt.yticks([])
         plt.axis('off')
+
         
 
         __ = ax.imshow(self.heatmap_array,interpolation='gaussian',zorder=1,alpha=alpha,**kwargs)
         
-        img = plt.imread(f'./keyhmap/images/keyboard_{self.layout}.png')
+        img = plt.imread(f'{self.curdir}/images/keyboard_{self.layout}.png')
 
         __ = ax.imshow(img, zorder=0, extent=[0,59.3, 19.4, 0])
         self.heatmap_figure = fig
@@ -121,14 +125,17 @@ class  Heatmap():
     def show(self):
         self.heatmap_figure.show()
 
-    def save(self,save_dir,op_filename='cm.png',dpi=265,**kwargs):
-        curdir = save_dir
+    def save(self,op_filename=None,save_dir='.',dpi=265,**kwargs):
+        op_filename = op_filename or f'heatmap_{self.layout}.png'
+        op_path = os.path.join(save_dir,op_filename)
+        
         self.heatmap_figure.savefig(
-            f'{curdir}/images/{op_filename}',
+            op_path,
             dpi=dpi,
             pad_inches=0,
             transparent=True,
             bbox_inches='tight',
             **kwargs
         )
+        print(f'{op_path} written.')
 
