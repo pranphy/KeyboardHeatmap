@@ -16,9 +16,11 @@ class  Heatmap():
     def __init__(self,layout='qwerty'):
         self.layout = layout
         self.key_map = self.__make_map()
-        self.heatmap_array = np.zeros(shape=(20,60))
         self.curdir = os.path.dirname(os.path.abspath(__file__))
 
+
+    def __initialize_heatmap_array(self):
+        self.heatmap_array = np.zeros(shape=(20,60))
 
     def __make_map(self):
         # here is how the map works, I looked at the keyboard layout
@@ -35,6 +37,7 @@ class  Heatmap():
             [12,8,r'zZ xX cC vV bB nN mM ,< .> /?']
         ]
 
+        self.__initialize_heatmap_array()
         char_map = {}
         width = 4
         height = 4
@@ -89,6 +92,8 @@ class  Heatmap():
     def make_heatmap(self,data,layout=None,ignore_other=True,verbose=False,alpha=0.8,sigmas=None,**kwargs):
         normalize = True
         layout = layout or self.layout
+        self.__initialize_heatmap_array()
+        heatmap_data = None
         if isinstance(data,dict):
             if layout == 'bakamana':
                 data =  {utl.to_ascii(k):v for k,v in data.items()}
@@ -104,10 +109,12 @@ class  Heatmap():
             import scipy as sp
             import scipy.ndimage
             sigma = (sigmas,sigmas)
-            self.heatmap_array = sp.ndimage.filters.gaussian_filter(self.heatmap_array,sigma,mode='constant')
-        self.__make_plot(alpha,**kwargs)
+            heatmap_data = sp.ndimage.filters.gaussian_filter(self.heatmap_array,sigma,mode='constant')
+        else:
+            heatmap_data = self.heatmap_array
+        self.__make_plot(heatmap_data,alpha,**kwargs)
     
-    def __make_plot(self,alpha,**kwargs):
+    def __make_plot(self,heatmap_data,alpha,**kwargs):
         fig, ax = plt.subplots()
         plt.xticks([])
         plt.yticks([])
@@ -115,7 +122,7 @@ class  Heatmap():
 
         
 
-        __ = ax.imshow(self.heatmap_array,interpolation='gaussian',zorder=1,alpha=alpha,**kwargs)
+        __ = ax.imshow(heatmap_data,interpolation='gaussian',zorder=1,alpha=alpha,**kwargs)
         
         img = plt.imread(f'{self.curdir}/images/keyboard_{self.layout}.png')
 

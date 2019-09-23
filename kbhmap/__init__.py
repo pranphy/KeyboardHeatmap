@@ -8,7 +8,7 @@
 import click
 
 
-from keyhmap.heatmap import Heatmap
+from kbhmap.heatmap import Heatmap
 
 @click.command()
 

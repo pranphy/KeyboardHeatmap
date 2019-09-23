@@ -54,8 +54,8 @@ See [notebook](http://github.com/pranphy/keyboardheatmap/test/MakeHeatmap.ipynb)
 
 # Outputs
 Example heatmap for QWERTY
-![An example heatmap](http://github.com/pranphy/keyboardheatmap/keyhmap/images/example_qwerty.png)
+![An example heatmap](http://github.com/pranphy/keyboardheatmap/kbhmap/images/example_qwerty.png)
 
 
 Example heatmap for बकमान 
-![An example heatmap](http://github.com/pranphy/keyboardheatmap/keyhmap/images/example_bakamana.png)
+![An example heatmap](http://github.com/pranphy/keyboardheatmap/kbhmap/images/example_bakamana.png)
