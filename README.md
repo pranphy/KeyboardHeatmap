@@ -3,6 +3,14 @@
 This project helps to create heatmap of keys in keyboard for some given text. Supports Nepali `नेपाली` keyboard layout, the popular `बकमान`(bakamana) for now and the usual `qwerty` layout. Other layouts will be added in due course.
 
 # Installation
+
+Use pip to install 
+```
+pip install kbhmap
+```
+
+Or if you want the bleeding edge version, do the following
+
 Clone the repository and run setup.
 ```
 git clone https://github.com/pranphy/KeyboardHeatmap
@@ -54,8 +62,8 @@ See [notebook](https://github.com/pranphy/KeyboardHeatmap/blob/master/test/MakeH
 
 # Outputs
 Example heatmap for QWERTY
-![An example heatmap](https://github.com/pranphy/KeyboardHeatmap/blob/master/kbhmap/images/example_qwerty.png)
+![An example heatmap](https://raw.githubusercontent.com/pranphy/KeyboardHeatmap/master/kbhmap/images/example_qwerty.png)
 
 
 Example heatmap for बकमान 
-![An example heatmap](https://github.com/pranphy/KeyboardHeatmap/blob/master/kbhmap/images/example_bakamana.png)
+![An example heatmap](https://raw.githubusercontent.com/pranphy/KeyboardHeatmap/master/kbhmap/images/example_bakamana.png)
